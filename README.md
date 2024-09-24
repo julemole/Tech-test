@@ -65,5 +65,7 @@ Ejecutar la aplicación:
 
 mvn spring-boot:run
 
+Rutas principales:
+![image](https://github.com/user-attachments/assets/4093ef92-1936-4b74-a915-5d2b95a4547e)
 
 
