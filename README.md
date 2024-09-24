@@ -68,4 +68,25 @@ mvn spring-boot:run
 Rutas principales:
 ![image](https://github.com/user-attachments/assets/4093ef92-1936-4b74-a915-5d2b95a4547e)
 
+Configuración del Frontend
+Instalación
+Navegar al directorio del frontend:
+
+Instalar dependencias:
+npm install
+
+Configuración
+Crear un archivo .env en el directorio frontend con la siguiente configuración:
+REACT_APP_API_URL=http://springbootinventory-env.eba-qbbgb3cr.us-east-2.elasticbeanstalk.com
+
+Ejecución
+Ejecutar la aplicación React:
+npm start
+
+La aplicación estará disponible en: http://localhost:3000
+
+Aplicación desplegada en AWS:
+http://react-inv-app.s3-website.us-east-2.amazonaws.com/companies
+
+
 
