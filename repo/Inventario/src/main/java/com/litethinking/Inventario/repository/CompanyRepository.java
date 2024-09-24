@@ -9,6 +9,5 @@ import java.util.Optional;
 @Repository("companyRepository")
 public interface CompanyRepository extends JpaRepository<Company, String> {
     Optional<Company> findByNit(String NIT);
-
     void deleteByNit(String NIT);
 }

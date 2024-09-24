@@ -8,12 +8,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Swal from 'sweetalert2';
 import { getProducts, createProduct, updateProduct, deleteProduct } from '../services/productService';
+import { useTranslation } from 'react-i18next';
 import styles from '../styles/home.module.css';
 import { getCompanies } from '../services/companyService';
 import { getCategories } from '../services/categoryService';
 import { SelectChangeEvent } from '@mui/material';
 
-const Products = () => {
+const Products: React.FC = () => {
+  const { t } = useTranslation();
   const [products, setProducts] = useState<any[]>([]);
   const [companies, setCompanies] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
@@ -122,12 +124,12 @@ const Products = () => {
 
   const handleDelete = (code: string) => {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'You will not be able to recover this product!',
+      title: t('areYouSure'),
+      text: t('cannotRecoverProduct'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Delete',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: t('delete'),
+      cancelButtonText: t('cancel'),
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -152,23 +154,23 @@ const Products = () => {
   return (
     <div className={styles.mainContent}>
       <Typography variant="h4" gutterBottom style={{ color: '#ffffff' }}>
-        Products
+        {t('products')}
       </Typography>
       <Button variant="contained" color="primary" onClick={() => handleOpenDialog()} sx={{ mb: 2 }}>
-        Add new product
+        {t('addNewProduct')}
       </Button>
       <TableContainer component={Paper} style={{ backgroundColor: '#1e1e1e', color: '#ffffff' }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell style={{ color: '#ffffff' }}>Code</TableCell>
-              <TableCell style={{ color: '#ffffff' }}>Name</TableCell>
-              <TableCell style={{ color: '#ffffff' }}>Description</TableCell>
-              <TableCell style={{ color: '#ffffff' }}>Price</TableCell>
-              <TableCell style={{ color: '#ffffff' }}>Company</TableCell>
-              <TableCell style={{ color: '#ffffff' }}>Categories</TableCell>
-              <TableCell style={{ color: '#ffffff' }}>In Inventory</TableCell> {/* Nueva columna para isInInventory */}
-              <TableCell style={{ color: '#ffffff' }}>Actions</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('code')}</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('name')}</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('description')}</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('price')}</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('company')}</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('categories')}</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('inInventory')}</TableCell> {/* Nueva columna para isInInventory */}
+              <TableCell style={{ color: '#ffffff' }}>{t('actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -184,7 +186,7 @@ const Products = () => {
                   {product.categories.map((category: any) => category.name).join(', ')}
                 </TableCell>
                 <TableCell style={{ color: '#ffffff' }}>
-                  {product.isInInventory ? 'Yes' : 'No'} {/* Mostrar si está en inventario */}
+                  {product.isInInventory ? t('yes') : t('no')} {/* Mostrar si está en inventario */}
                 </TableCell>
                 <TableCell>
                   <IconButton color="primary" onClick={() => handleOpenDialog(product)}>
@@ -211,11 +213,11 @@ const Products = () => {
       </TableContainer>
 
       <Dialog open={openDialog} onClose={handleCloseDialog} PaperProps={{ style: { backgroundColor: '#2e2e2e', color: '#ffffff' } }}>
-        <DialogTitle>{editProduct ? 'Edit Product' : 'Add New Product'}</DialogTitle>
+        <DialogTitle>{editProduct ? t('editProduct') : t('addNewProduct')}</DialogTitle>
         <DialogContent>
           <TextField
             margin="dense"
-            label="Code"
+            label={t('code')}
             name="code"
             value={form.code}
             onChange={handleChange}
@@ -231,7 +233,7 @@ const Products = () => {
           />
           <TextField
             margin="dense"
-            label="Name"
+            label={t('name')}
             name="name"
             value={form.name}
             onChange={handleChange}
@@ -241,7 +243,7 @@ const Products = () => {
           />
           <TextField
             margin="dense"
-            label="Description"
+            label={t('description')}
             name="description"
             value={form.description}
             onChange={handleChange}
@@ -251,7 +253,7 @@ const Products = () => {
           />
           <TextField
             margin="dense"
-            label="Price"
+            label={t('price')}
             name="price"
             type="number"
             value={form.price}
@@ -265,7 +267,7 @@ const Products = () => {
               id="company-select-label"
               style={{ color: '#ffffff' }}
             >
-              Company
+              {t('company')}
             </InputLabel>
             <Select
               labelId="company-select-label"
@@ -308,7 +310,7 @@ const Products = () => {
               id="category-select-label"
               style={{ color: '#ffffff' }}
             >
-              Categories
+              {t('categories')}
             </InputLabel>
             <Select
               labelId="category-select-label"
@@ -355,16 +357,16 @@ const Products = () => {
                 style={{ color: '#ffffff' }}
               />
             }
-            label="Save in Inventory"
+            label={t('saveInInventory')}
             style={{ color: '#ffffff' }}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="secondary">
-            Cancel
+            {t('cancel')}
           </Button>
           <Button onClick={handleSubmit} color="primary">
-            {editProduct ? 'Update' : 'Create'}
+            {editProduct ? t('update') : t('create')}
           </Button>
         </DialogActions>
       </Dialog>

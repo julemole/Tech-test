@@ -1,25 +1,35 @@
 package com.litethinking.Inventario.service.Impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.litethinking.Inventario.model.User;
 import com.litethinking.Inventario.repository.UserRepository;
+
 import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    /**
+     * Loads a user by their username.
+     *
+     * @param username The username of the user to be loaded.
+     * @return UserDetails object containing user information for authentication.
+     * @throws UsernameNotFoundException if the user is not found.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isEmpty()) {
-            throw new UsernameNotFoundException("User not found");
+            throw new UsernameNotFoundException("Error: User not found.");
         }
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.get().getUsername())

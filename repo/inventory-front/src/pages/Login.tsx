@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Box } from '@mui/material';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import styles from '../styles/auth.module.css';
 
-const LoginPage = () => {
+const LoginPage: React.FC = () => {
+  const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useAuth(); // Traemos el método login desde el contexto
@@ -15,7 +17,7 @@ const LoginPage = () => {
       // Llamamos al método login con las credenciales
       await login(username, password);
     } catch (err) {
-      setError('Credenciales incorrectas o error en el servidor');
+      setError(t('loginError'));
     }
   };
 
@@ -23,11 +25,11 @@ const LoginPage = () => {
     <div className={styles.container}>
       <Box className={styles.formWrapper}>
         <Typography variant="h4" className={styles.title}>
-          Welcome to Inventory App
+          {t('welcome')}
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
-            label="Username"
+            label={t('username')}
             variant="outlined"
             fullWidth
             margin="normal"
@@ -40,19 +42,19 @@ const LoginPage = () => {
               style: { color: 'white' },
             }}
             sx={{
-              input: { color: '#fff' }, // Color del texto
+              input: { color: '#fff' },
               '& .MuiOutlinedInput-root': {
                 '& fieldset': {
-                  borderColor: 'white', // Color del borde cuando no está seleccionado
+                  borderColor: 'white',
                 },
                 '&:hover fieldset': {
-                  borderColor: 'white', // Color del borde al hacer hover
+                  borderColor: 'white',
                 },
               },
             }}
           />
           <TextField
-            label="Password"
+            label={t('password')}
             type="password"
             variant="outlined"
             fullWidth
@@ -66,13 +68,13 @@ const LoginPage = () => {
               style: { color: 'white' },
             }}
             sx={{
-              input: { color: '#fff' }, // Color del texto
+              input: { color: '#fff' },
               '& .MuiOutlinedInput-root': {
                 '& fieldset': {
-                  borderColor: 'white', // Color del borde cuando no está seleccionado
+                  borderColor: 'white',
                 },
                 '&:hover fieldset': {
-                  borderColor: 'white', // Color del borde al hacer hover
+                  borderColor: 'white',
                 },
               },
             }}
@@ -84,7 +86,7 @@ const LoginPage = () => {
             fullWidth
             sx={{ mt: 2 }}
           >
-            Login
+            {t('login')}
           </Button>
           {error && (
             <Typography variant="body2" align="center" sx={{ mt: 2, color: 'red' }}>
@@ -92,9 +94,9 @@ const LoginPage = () => {
             </Typography>
           )}
           {/* <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-            <span>¿Dont have an account? </span>
+            <span>{t('noAccount')}</span>
             <a href="register" style={{ color: '#61dafb' }}>
-              Register here
+              {t('registerHere')}
             </a>
           </Typography> */}
         </form>

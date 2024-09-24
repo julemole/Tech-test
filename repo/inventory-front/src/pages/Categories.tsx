@@ -4,9 +4,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Swal from 'sweetalert2';
 import { getCategories, createCategory, updateCategory, deleteCategory } from '../services/categoryService';
+import { useTranslation } from 'react-i18next';
 import styles from '../styles/home.module.css';
 
-const Categories = () => {
+const Categories: React.FC = () => {
+  const { t } = useTranslation();
   const [categories, setCategories] = useState<any[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [editCategory, setEditCategory] = useState<any>(null);
@@ -57,12 +59,12 @@ const Categories = () => {
 
   const handleDelete = (id: string) => {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'You will not be able to recover this category!',
+      title: t('areYouSure'),
+      text: t('cannotRecoverCategory'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Delete',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: t('delete'),
+      cancelButtonText: t('cancel'),
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -87,18 +89,18 @@ const Categories = () => {
   return (
     <div className={styles.mainContent}>
       <Typography variant="h4" gutterBottom style={{ color: '#ffffff' }}>
-        Categories
+        {t('categories')}
       </Typography>
       <Button variant="contained" color="primary" onClick={() => handleOpenDialog()} sx={{ mb: 2 }}>
-        Create New Category
+        {t('createNewCategory')}
       </Button>
       <TableContainer component={Paper} style={{ backgroundColor: '#1e1e1e', color: '#ffffff' }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell style={{ color: '#ffffff' }}>Id</TableCell>
-              <TableCell style={{ color: '#ffffff' }}>Name</TableCell>
-              <TableCell style={{ color: '#ffffff' }}>Actions</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('id')}</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('name')}</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -131,11 +133,11 @@ const Categories = () => {
       </TableContainer>
 
       <Dialog open={openDialog} onClose={handleCloseDialog} PaperProps={{ style: { backgroundColor: '#2e2e2e', color: '#ffffff' } }}>
-        <DialogTitle>{editCategory ? 'Edit Category' : 'Add New Category'}</DialogTitle>
+        <DialogTitle>{editCategory ? t('editCategory') : t('addNewCategory')}</DialogTitle>
         <DialogContent>
           <TextField
             margin="dense"
-            label="Name"
+            label={t('name')}
             name="name"
             value={form.name}
             onChange={handleChange}
@@ -146,10 +148,10 @@ const Categories = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="secondary">
-            Cancel
+            {t('cancel')}
           </Button>
           <Button onClick={handleSubmit} color="primary">
-            {editCategory ? 'Update' : 'Create'}
+            {editCategory ? t('update') : t('create')}
           </Button>
         </DialogActions>
       </Dialog>

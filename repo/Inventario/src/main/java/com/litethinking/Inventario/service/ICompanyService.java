@@ -1,7 +1,6 @@
 package com.litethinking.Inventario.service;
 
 import com.litethinking.Inventario.dto.CompanyDto;
-import com.litethinking.Inventario.model.Company;
 import com.litethinking.Inventario.model.Response;
 
 public interface ICompanyService {

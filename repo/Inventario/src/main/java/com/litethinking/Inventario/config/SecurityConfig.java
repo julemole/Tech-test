@@ -1,8 +1,6 @@
 package com.litethinking.Inventario.config;
 
-import com.litethinking.Inventario.filter.JwtAuthFilter;
 import com.litethinking.Inventario.service.Impl.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,7 +8,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,12 +20,21 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private JwtAuthFilter jwtAuthFilter;
+    private final JwtAuthFilter jwtAuthFilter;
+    private final UserService userService;
 
-    @Autowired
-    private UserService userService;
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserService userService) {
+        this.jwtAuthFilter = jwtAuthFilter;
+        this.userService = userService;
+    }
 
+    /**
+     * Configures the security filter chain for the application.
+     *
+     * @param http HttpSecurity object to configure the security settings.
+     * @return SecurityFilterChain object that defines the security configurations.
+     * @throws Exception if an error occurs during the configuration.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -45,21 +51,28 @@ public class SecurityConfig {
                     configuration.setAllowCredentials(true);
                     return configuration;
                 }))
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) // Disable CSRF protection
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/auth/**").permitAll() // Allow unrestricted access to /auth endpoints
+                        .anyRequest().authenticated() // All other requests require authentication
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Use stateless session management
                 );
 
-        // Añadir el filtro JWT antes del filtro de autenticación predeterminado
+        // Add JwtAuthFilter before UsernamePasswordAuthenticationFilter in the security filter chain
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
+    /**
+     * Configures the AuthenticationManager with a custom userDetailsService and password encoder.
+     *
+     * @param http HttpSecurity object used to configure the authentication manager.
+     * @return AuthenticationManager object that handles authentication.
+     * @throws Exception if an error occurs during the configuration.
+     */
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
@@ -69,8 +82,13 @@ public class SecurityConfig {
                 .build();
     }
 
+    /**
+     * Creates a PasswordEncoder bean using BCrypt to encrypt passwords.
+     *
+     * @return PasswordEncoder object for encoding passwords.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Usar BCrypt para encriptar contraseñas
+        return new BCryptPasswordEncoder(); // Use BCrypt to encrypt passwords
     }
 }

@@ -4,9 +4,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Swal from 'sweetalert2';
 import { getClients, createClient, updateClient, deleteClient } from '../services/clientService';
+import { useTranslation } from 'react-i18next';
 import styles from '../styles/home.module.css';
 
-const Clients = () => {
+const Clients: React.FC = () => {
+  const { t } = useTranslation();
   const [clients, setClients] = useState<any[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [editClient, setEditClient] = useState<any>(null);
@@ -57,12 +59,12 @@ const Clients = () => {
 
   const handleDelete = (id: number) => {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'You will not be able to recover this client!',
+      title: t('areYouSure'),
+      text: t('cannotRecoverClient'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Delete',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: t('delete'),
+      cancelButtonText: t('cancel'),
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -87,21 +89,21 @@ const Clients = () => {
   return (
     <div className={styles.mainContent}>
       <Typography variant="h4" gutterBottom style={{ color: '#ffffff' }}>
-        Clients
+        {t('clients')}
       </Typography>
       <Button variant="contained" color="primary" onClick={() => handleOpenDialog()} sx={{ mb: 2 }}>
-        Add new client
+        {t('addNewClient')}
       </Button>
       <TableContainer component={Paper} style={{ backgroundColor: '#1e1e1e', color: '#ffffff' }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell style={{ color: '#ffffff' }}>ID</TableCell>
-              <TableCell style={{ color: '#ffffff' }}>Name</TableCell>
-              <TableCell style={{ color: '#ffffff' }}>Email</TableCell>
-              <TableCell style={{ color: '#ffffff' }}>Address</TableCell>
-              <TableCell style={{ color: '#ffffff' }}>Phone</TableCell>
-              <TableCell style={{ color: '#ffffff' }}>Actions</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('id')}</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('name')}</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('email')}</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('address')}</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('phone')}</TableCell>
+              <TableCell style={{ color: '#ffffff' }}>{t('actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -137,11 +139,11 @@ const Clients = () => {
       </TableContainer>
 
       <Dialog open={openDialog} onClose={handleCloseDialog} PaperProps={{ style: { backgroundColor: '#2e2e2e', color: '#ffffff' } }}>
-        <DialogTitle>{editClient ? 'Edit Client' : 'Add New Client'}</DialogTitle>
+        <DialogTitle>{editClient ? t('editClient') : t('addNewClient')}</DialogTitle>
         <DialogContent>
           <TextField
             margin="dense"
-            label="Name"
+            label={t('name')}
             name="name"
             value={form.name}
             onChange={handleChange}
@@ -151,7 +153,7 @@ const Clients = () => {
           />
           <TextField
             margin="dense"
-            label="Email"
+            label={t('email')}
             name="email"
             value={form.email}
             onChange={handleChange}
@@ -161,7 +163,7 @@ const Clients = () => {
           />
           <TextField
             margin="dense"
-            label="Address"
+            label={t('address')}
             name="address"
             value={form.address}
             onChange={handleChange}
@@ -171,7 +173,7 @@ const Clients = () => {
           />
           <TextField
             margin="dense"
-            label="Phone"
+            label={t('phone')}
             name="phone"
             value={form.phone}
             onChange={handleChange}
@@ -182,10 +184,10 @@ const Clients = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="secondary">
-            Cancel
+            {t('cancel')}
           </Button>
           <Button onClick={handleSubmit} color="primary">
-            {editClient ? 'Update' : 'Create'}
+            {editClient ? t('update') : t('create')}
           </Button>
         </DialogActions>
       </Dialog>

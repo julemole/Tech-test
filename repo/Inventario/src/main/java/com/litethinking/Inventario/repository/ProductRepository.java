@@ -16,7 +16,6 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     List<Product> findByCompanyNit(String companyNit);
     @Query("SELECT p FROM Product p LEFT JOIN FETCH p.categories WHERE p.code = :code")
     Optional<Product> findByCodeWithCategories(String code);
-
     @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.categories")
     List<Product> findAllWithCategories();
 }

@@ -1,10 +1,14 @@
 package com.litethinking.Inventario.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
 import java.util.Set;
 
+
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductDto {
     private String code; // code como PK
     private String name;

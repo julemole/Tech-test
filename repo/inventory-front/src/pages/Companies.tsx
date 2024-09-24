@@ -3,10 +3,12 @@ import { Typography, Button, Table, TableBody, TableCell, TableContainer, TableH
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getCompanies, createCompany, updateCompany, deleteCompany } from '../services/companyService';
+import { useTranslation } from 'react-i18next';
 import styles from '../styles/home.module.css';
 import Swal from 'sweetalert2';
 
-const Companies = () => {
+const Companies: React.FC = () => {
+  const { t } = useTranslation();
   const [role, setRole] = useState('');
   const [companies, setCompanies] = useState<any[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
@@ -60,12 +62,12 @@ const Companies = () => {
 
   const handleDelete = (nit: string) => {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'You will not be able to recover this company!',
+      title: t('areYouSure'),
+      text: t('cannotRecoverCompany'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Delete',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: t('delete'),
+      cancelButtonText: t('cancel'),
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -90,21 +92,21 @@ const Companies = () => {
   return (
     <div className={styles.mainContent}>
       <Typography variant="h4" gutterBottom style={{ color: '#fff' }}>
-        Companies
+        {t('companies')}
       </Typography>
       {role === 'ROLE_ADMINISTRATOR' &&
       <Button variant="contained" color="primary" onClick={() => handleOpenDialog()} sx={{ mb: 2 }}>
-        Add new company
+        {t('addNewCompany')}
       </Button>}
       <TableContainer component={Paper} style={{ backgroundColor: '#1e1e1e', color: '#fff' }}>
         <Table size='small'>
           <TableHead>
             <TableRow>
-              <TableCell style={{ color: '#fff' }}>NIT</TableCell>
-              <TableCell style={{ color: '#fff' }}>Name</TableCell>
-              <TableCell style={{ color: '#fff' }}>Address</TableCell>
-              <TableCell style={{ color: '#fff' }}>Phone</TableCell>
-              <TableCell style={{ color: '#fff' }}>Actions</TableCell>
+              <TableCell style={{ color: '#fff' }}>{t('nit')}</TableCell>
+              <TableCell style={{ color: '#fff' }}>{t('name')}</TableCell>
+              <TableCell style={{ color: '#fff' }}>{t('address')}</TableCell>
+              <TableCell style={{ color: '#fff' }}>{t('phone')}</TableCell>
+              <TableCell style={{ color: '#fff' }}>{t('actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -143,32 +145,32 @@ const Companies = () => {
       </TableContainer>
 
       <Dialog open={openDialog} onClose={handleCloseDialog} PaperProps={{ style: { backgroundColor: '#2e2e2e', color: '#fff' } }}>
-        <DialogTitle>{editCompany ? 'Edit Company' : 'Create New Company'}</DialogTitle>
+        <DialogTitle>{editCompany ? t('editCompany') : t('createNewCompany')}</DialogTitle>
         <DialogContent>
-        <TextField
-          margin="dense"
-          label="NIT"
-          name="nit"
-          type="number"
-          value={form.nit}
-          onChange={handleChange}
-          fullWidth
-          InputProps={{
-            style: { color: '#ffffff' },
-          }}
-          InputLabelProps={{
-            style: { color: '#ffffff' },
-          }}
-          sx={{
-            '& .MuiInputBase-input.Mui-disabled': {
-              WebkitTextFillColor: '#ccc',
-            },
-          }}
-          disabled={editCompany ? true : false}
-        />
           <TextField
             margin="dense"
-            label="Name"
+            label={t('nit')}
+            name="nit"
+            type="number"
+            value={form.nit}
+            onChange={handleChange}
+            fullWidth
+            InputProps={{
+              style: { color: '#ffffff' },
+            }}
+            InputLabelProps={{
+              style: { color: '#ffffff' },
+            }}
+            sx={{
+              '& .MuiInputBase-input.Mui-disabled': {
+                WebkitTextFillColor: '#ccc',
+              },
+            }}
+            disabled={editCompany ? true : false}
+          />
+          <TextField
+            margin="dense"
+            label={t('name')}
             name="name"
             value={form.name}
             onChange={handleChange}
@@ -178,7 +180,7 @@ const Companies = () => {
           />
           <TextField
             margin="dense"
-            label="Address"
+            label={t('address')}
             name="address"
             value={form.address}
             onChange={handleChange}
@@ -188,7 +190,7 @@ const Companies = () => {
           />
           <TextField
             margin="dense"
-            label="Phone"
+            label={t('phone')}
             name="phone"
             type="number"
             value={form.phone}
@@ -200,10 +202,10 @@ const Companies = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="secondary" variant='outlined'>
-            Cancel
+            {t('cancel')}
           </Button>
           <Button onClick={handleSubmit} color="primary" variant='outlined'>
-            {editCompany ? 'Update' : 'Create'}
+            {editCompany ? t('update') : t('create')}
           </Button>
         </DialogActions>
       </Dialog>

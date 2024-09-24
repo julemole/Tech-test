@@ -15,39 +15,38 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+    }
 
+
+    //Login endpoint, receives a POST request with an AuthRequest object and returns an AuthResponse object with a JWT token
     @PostMapping("/login")
     public AuthResponse createToken(@RequestBody AuthRequest authRequest) throws Exception {
         try {
-            // Autenticar usuario
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         } catch (AuthenticationException e) {
             throw new Exception("Invalid username or password");
         }
 
-        // Obtener los detalles del usuario
         final UserDetails userDetails = (UserDetails) authenticationManager
                 .authenticate(
                         new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
                 )
                 .getPrincipal();
 
-        // Generar el token
         final String jwtToken = jwtUtil.generateToken(userDetails);
 
-        // Obtener el rol del usuario
         String role = userDetails.getAuthorities().stream()
                 .findFirst()
                 .map(grantedAuthority -> grantedAuthority.getAuthority())
                 .orElse("ROLE_USER");
 
-        // Devolver el token y los detalles del usuario
         return new AuthResponse(jwtToken, userDetails.getUsername(), role);
     }
 }
